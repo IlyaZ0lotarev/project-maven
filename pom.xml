@@ -31,7 +31,6 @@
         <maven.compiler.target>18</maven.compiler.target>
     </properties>
 
-
     <repositories>
         <repository>
             <id>localrepo</id>
@@ -130,16 +129,43 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>build-manifest-classpath</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <pathconvert property="dependency.classpath" pathsep=" ">
+                                    <fileset dir="${project.build.directory}/lib" includes="*.jar"/>
+                                    <chainedmapper>
+                                        <flattenmapper/>
+                                        <globmapper from="*" to="lib/*"/>
+                                    </chainedmapper>
+                                </pathconvert>
+                            </target>
+                            <exportAntProperties>true</exportAntProperties>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
                     <archive>
                         <manifest>
-                            <addClasspath>true</addClasspath>
-                            <classpathPrefix>lib/</classpathPrefix>
+                            <addClasspath>false</addClasspath>
                             <mainClass>org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader</mainClass>
                         </manifest>
                         <manifestEntries>
+                            <Class-Path>./ ${dependency.classpath}</Class-Path>
                             <Rsrc-Main-Class>com.javarush.games.racer.RacerGame</Rsrc-Main-Class>
                         </manifestEntries>
                     </archive>
@@ -172,4 +198,5 @@
             </resource>
         </resources>
     </build>
+
 </project>
