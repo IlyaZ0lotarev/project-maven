@@ -26,17 +26,19 @@
         </dependencies>
     </dependencyManagement>
 
-    <repositories>
-        <repository>
-            <id>project-repo</id>
-            <url>file://${project.basedir}/repo</url>
-        </repository>
-    </repositories>
-
     <properties>
         <maven.compiler.source>18</maven.compiler.source>
         <maven.compiler.target>18</maven.compiler.target>
     </properties>
+
+
+    <repositories>
+        <repository>
+            <id>localrepo</id>
+            <name>local repository</name>
+            <url>file:${project.basedir}/lib</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
@@ -96,7 +98,7 @@
                             <goal>install-file</goal>
                         </goals>
                         <configuration>
-                            <file>${basedir}/lib/desktop-game-engine-1.0.jar</file>
+                            <file>${basedir}/lib/com/javarush/desktop-game-engine/1.0/desktop-game-engine-1.0.jar</file>
                             <groupId>com.javarush</groupId>
                             <artifactId>desktop-game-engine</artifactId>
                             <version>1.0</version>
@@ -169,7 +171,5 @@
                 <directory>src/main/resources</directory>
             </resource>
         </resources>
-
     </build>
-
 </project>
